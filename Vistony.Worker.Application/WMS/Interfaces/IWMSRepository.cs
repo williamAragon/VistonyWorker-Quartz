@@ -8,5 +8,9 @@ namespace Vistony.Worker.Application.WMS.Interfaces
 {
     public interface IWMSRepository
     {
+        Task EjecutarUnitsOfMeasure(string database);
+        Task EjecutarItems(string database);
+        Task EjecutarOutbundOrders(string database);
+        Task EjecutarReceipts(string database);
     }
 }

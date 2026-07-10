@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Vistony.Worker.Application.WMS.UseCases;
 
 namespace Vistony.Worker.Api.Controllers
 {

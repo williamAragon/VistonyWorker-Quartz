@@ -34,6 +34,8 @@ using Vistony.Worker.Application.TipoCambio.Interfaces;
 using Vistony.Worker.Application.TipoCambio.UseCases;
 using Vistony.Worker.Application.UpdateWorkPath.Interfaces;
 using Vistony.Worker.Application.UpdateWorkPath.UseCases;
+using Vistony.Worker.Application.WMS.Interfaces;
+using Vistony.Worker.Application.WMS.UseCases;
 using Vistony.Worker.Infrastructure.Correo;
 using Vistony.Worker.Infrastructure.Firestore;
 using Vistony.Worker.Infrastructure.Hana;
@@ -136,6 +138,10 @@ public static class DependencyInjection
         services.AddScoped<IPCPRepository, PCPHanaRepository>();
         services.AddScoped<PCPUseCase>();
         services.AddScoped<PCPJob>();
+
+        services.AddScoped<IWMSRepository, WMSRepository>();
+        services.AddScoped<WMSUseCase>();
+        services.AddScoped<WMSJob>();
 
         return services;
     }

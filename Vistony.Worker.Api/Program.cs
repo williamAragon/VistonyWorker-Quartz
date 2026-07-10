@@ -23,6 +23,8 @@ builder.Host.UseSerilog((context, config) =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddHttpClient();
+
 
 // Dependencias de Infrastructure
 builder.Services.AddInfrastructure(builder.Configuration);

@@ -16,6 +16,7 @@ using Vistony.Worker.Application.RutaHistorico.UseCases;
 using Vistony.Worker.Application.StockCierre.UseCases;
 using Vistony.Worker.Application.TipoCambio.UseCases;
 using Vistony.Worker.Application.UpdateWorkPath.UseCases;
+using Vistony.Worker.Application.WMS.UseCases;
 
 namespace Vistony.Worker.Api
 {
@@ -191,7 +192,7 @@ namespace Vistony.Worker.Api
             RecurringJob.AddOrUpdate<WMSJob>(
                 "wms",
                 job => job.ExecuteAsync(),
-                configuration["Jobs:WMS"] ?? "05 * * * *",
+                configuration["Jobs:WMS"] ?? "*/5 * * * *",
                 new RecurringJobOptions
                 {
                     TimeZone = timeZone
