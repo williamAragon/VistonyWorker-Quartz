@@ -32,19 +32,10 @@ namespace Vistony.Worker.Application.WMS.UseCases
         {
             _logger.LogInformation("Iniciando flujo WMS");
             var tasks = new List<Task>();
-<<<<<<< HEAD
-            /*
-            foreach (var database in _databases)
-            {
-                tasks.Add(EjecutarPorDatabaseAsync(database));
-            }*/
-
-=======
             foreach (var database in _databases)
             {
                 tasks.Add(EjecutarDatabaseAsync(database));
             }
->>>>>>> WMS
             await Task.WhenAll(tasks);
             _logger.LogInformation("Finalizó flujo WMS");
         }

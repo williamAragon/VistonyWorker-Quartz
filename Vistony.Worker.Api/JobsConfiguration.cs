@@ -188,7 +188,7 @@ namespace Vistony.Worker.Api
                 {
                     TimeZone = timeZone
                 });
-            /*
+            
             RecurringJob.AddOrUpdate<WMSJob>(
                 "wms",
                 job => job.ExecuteAsync(),
@@ -196,7 +196,7 @@ namespace Vistony.Worker.Api
                 new RecurringJobOptions
                 {
                     TimeZone = timeZone
-                });*/
+                });
         }
     }
 }
