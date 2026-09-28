@@ -11,72 +11,69 @@ namespace Vistony.Worker.Infrastructure.Hana
 {
     public class ArticuloHanaRepository : IArticuloRepository
     {
-        private readonly string _connectionString;
+        private readonly string _connPeru;
+        private readonly string _connInduvis;
 
         public ArticuloHanaRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("HanaConnectionSEIDOR_PERU")!;
+            _connPeru = configuration.GetConnectionString("HanaConnectionSEIDOR_PERU")!;
+            _connInduvis = configuration.GetConnectionString("HanaConnectionSEIDOR")!;
         }
+
+        private string GetConnectionString(string location)
+            => location == "PE" ? _connPeru : _connInduvis;
 
         public async Task<List<string>> ObtenerCodigosAsync(string location)
         {
             var result = new List<string>();
 
-            await using var connection = new HanaConnection(_connectionString);
+            await using var connection = new HanaConnection(GetConnectionString(location));
             await connection.OpenAsync();
 
-            string database = $"B1H_VIST_{location}";
-            string query = $"CALL \"{database}\".\"API_WMS_WHS_GETITEM\"()";
-
+            var query = $"CALL \"B1H_VIST_{location}\".\"API_WMS_WHS_GETITEM\"()";
             await using var command = new HanaCommand(query, connection);
             await using var reader = await command.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
             {
                 var itemCode = Convert.ToString(reader["ItemCode"]);
-
                 if (!string.IsNullOrWhiteSpace(itemCode))
-                {
                     result.Add(itemCode);
-                }
             }
-
             return result;
         }
 
-        public async Task<Domain.Articulo.Articulo?> ObtenerDetalleAsync(
-            string location,
-            string companyId,
-            string itemCode)
+        public async Task<Domain.Articulo.Articulo?> ObtenerDetalleAsync(string location, string companyId, string itemCode)
         {
-            await using var connection = new HanaConnection(_connectionString);
+            await using var connection = new HanaConnection(GetConnectionString(location));
             await connection.OpenAsync();
 
-            string database = $"B1H_VIST_{location}";
-
-            string query =
-                $"CALL \"{database}\".\"API_WMS_WHS_GETITEM_PARAMETERS\"('{itemCode}')";
-
+            // parametrizado para evitar problemas con comillas en el ItemCode
+            var query = $"CALL \"B1H_VIST_{location}\".\"API_WMS_WHS_GETITEM_PARAMETERS\"(?)";
             await using var command = new HanaCommand(query, connection);
-            await using var reader = await command.ExecuteReaderAsync();
+            command.Parameters.Add(new HanaParameter { Value = itemCode });
 
+            await using var reader = await command.ExecuteReaderAsync();
             if (!await reader.ReadAsync())
                 return null;
 
             return new Domain.Articulo.Articulo
             {
                 CompanyId = companyId,
-                CorpLine = Convert.ToString(reader["U_VIS_Corp_Line"]) ?? string.Empty,
-                InventoryWeight = Convert.ToDouble(reader["InventoryWeight"]),
-                ItemCode = Convert.ToString(reader["ItemCode"]) ?? string.Empty,
-                ItemName = Convert.ToString(reader["ItemName"]) ?? string.Empty,
-                ItemsGroupCode = Convert.ToString(reader["ItemsGroupCode"]) ?? string.Empty,
-                PurchaseUnitHeight = Convert.ToString(reader["PurchaseUnitHeight"]) ?? string.Empty,
-                PurchaseUnitLength = Convert.ToString(reader["PurchaseUnitLength"]) ?? string.Empty,
-                PurchaseUnitWidth = Convert.ToString(reader["PurchaseUnitWidth"]) ?? string.Empty,
-                QtyPallet = Convert.ToDouble(reader["QtyPallet"]),
-                UoMGroupEntry = Convert.ToString(reader["UoMGroupEntry"]) ?? string.Empty
+                CorpLine = Str(reader["U_VIS_Corp_Line"]),
+                InventoryWeight = Dbl(reader["InventoryWeight"]),
+                ItemCode = Str(reader["ItemCode"]),
+                ItemName = Str(reader["ItemName"]),
+                ItemsGroupCode = Str(reader["ItemsGroupCode"]),
+                PurchaseUnitHeight = Str(reader["PurchaseUnitHeight"]),
+                PurchaseUnitLength = Str(reader["PurchaseUnitLength"]),
+                PurchaseUnitWidth = Str(reader["PurchaseUnitWidth"]),
+                QtyPallet = Dbl(reader["QtyPallet"]),
+                UoMGroupEntry = Str(reader["UoMGroupEntry"])
             };
         }
+
+        private static string Str(object v) => v is DBNull ? string.Empty : Convert.ToString(v) ?? string.Empty;
+        private static double Dbl(object v) => v is DBNull ? 0 : Convert.ToDouble(v);
     }
 }

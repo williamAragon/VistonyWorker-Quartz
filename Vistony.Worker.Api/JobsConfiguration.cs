@@ -89,14 +89,14 @@ namespace Vistony.Worker.Api
                     TimeZone = timeZone
                 });
 
-            //RecurringJob.AddOrUpdate<ObtenerPagoComisionesJob>(
-            //    "pago-comisiones",
-            //    job => job.ExecuteAsync(),
-            //    configuration["Jobs:PagoComisiones"] ?? "21 11 * * *",
-            //    new RecurringJobOptions
-            //    {
-            //        TimeZone = timeZone
-            //    });
+            RecurringJob.AddOrUpdate<ObtenerPagoComisionesJob>(
+                "pago-comisiones",
+                job => job.ExecuteAsync(),
+                configuration["Jobs:PagoComisiones"] ?? "21 11 * * *",
+                new RecurringJobOptions
+                {
+                    TimeZone = timeZone
+                });
 
             RecurringJob.AddOrUpdate<ObtenerStockCierreJob>(
                 "stock-cierre",
@@ -187,7 +187,7 @@ namespace Vistony.Worker.Api
                 {
                     TimeZone = timeZone
                 });
-
+            /*
             RecurringJob.AddOrUpdate<WMSJob>(
                 "wms",
                 job => job.ExecuteAsync(),
@@ -195,7 +195,7 @@ namespace Vistony.Worker.Api
                 new RecurringJobOptions
                 {
                     TimeZone = timeZone
-                });
+                });*/
         }
     }
 }

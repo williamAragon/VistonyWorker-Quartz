@@ -33,11 +33,11 @@ namespace Vistony.Worker.Application.WMS.UseCases
             _logger.LogInformation("Iniciando flujo WMS");
 
             var tasks = new List<Task>();
-
+            /*
             foreach (var database in _databases)
             {
                 tasks.Add(EjecutarPorDatabaseAsync(database));
-            }
+            }*/
 
             await Task.WhenAll(tasks);
 

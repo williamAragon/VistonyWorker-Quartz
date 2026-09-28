@@ -39,57 +39,43 @@ namespace Vistony.Worker.Application.Articulo.UseCases
             {
                 try
                 {
-                    var companyId =
-                        await _firestoreClient.ObtenerCompanyIdAsync(location);
-
+                    var companyId = await _firestoreClient.ObtenerCompanyIdAsync(location);
                     if (string.IsNullOrWhiteSpace(companyId))
+                    {
+                        _logger.LogWarning("No existe company en Firestore para {Location}", location);
                         continue;
+                    }
 
-                    var itemCodes =
-                        await _repository.ObtenerCodigosAsync(location);
+                    var itemCodes = await _repository.ObtenerCodigosAsync(location);
+                    var existentes = await _firestoreClient.ObtenerItemCodesExistentesAsync(companyId);
 
-                    foreach (var itemCode in itemCodes)
+                    var pendientes = itemCodes.Where(c => !existentes.Contains(c)).ToList();
+                    _logger.LogInformation("{Location}: {Total} en HANA, {Existentes} ya en Firestore, {Pendientes} por migrar",
+                        location, itemCodes.Count, existentes.Count, pendientes.Count);
+
+                    foreach (var itemCode in pendientes)
                     {
                         try
                         {
-                            bool existe =
-                                await _firestoreClient.ExisteAsync(
-                                    companyId,
-                                    itemCode);
-
-                            if (existe)
-                                continue;
-
-                            var articulo =
-                                await _repository.ObtenerDetalleAsync(
-                                    location,
-                                    companyId,
-                                    itemCode);
-
+                            var articulo = await _repository.ObtenerDetalleAsync(location, companyId, itemCode);
                             if (articulo == null)
+                            {
+                                _logger.LogWarning("{Location} {ItemCode}: sin detalle en HANA", location, itemCode);
                                 continue;
+                            }
 
                             await _firestoreClient.GuardarAsync(articulo);
-
-                            _logger.LogInformation(
-                                "Artículo migrado {ItemCode}",
-                                itemCode);
+                            _logger.LogInformation("Artículo migrado {Location} {ItemCode}", location, itemCode);
                         }
                         catch (Exception ex)
                         {
-                            _logger.LogError(
-                                ex,
-                                "Error ItemCode {ItemCode}",
-                                itemCode);
+                            _logger.LogError(ex, "Error {Location} ItemCode {ItemCode}", location, itemCode);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(
-                        ex,
-                        "Error Location {Location}",
-                        location);
+                    _logger.LogError(ex, "Error Location {Location}", location);
                 }
             }
         }

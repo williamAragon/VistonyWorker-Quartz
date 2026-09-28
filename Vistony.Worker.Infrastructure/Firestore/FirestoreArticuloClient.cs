@@ -30,6 +30,24 @@ namespace Vistony.Worker.Infrastructure.Firestore
             }.Build();
         }
 
+        public async Task<HashSet<string>> ObtenerItemCodesExistentesAsync(string companyId)
+        {
+            var snapshot = await _db.Collection("items")
+                .WhereEqualTo("companyId", companyId)
+                .Select("itemCode")
+                .GetSnapshotAsync();
+
+            var result = new HashSet<string>();
+
+            foreach (var doc in snapshot.Documents)
+            {
+                if (doc.TryGetValue<string>("itemCode", out var code) && !string.IsNullOrWhiteSpace(code))
+                    result.Add(code);
+            }
+
+            return result;
+        }
+
         public async Task<string?> ObtenerCompanyIdAsync(string location)
         {
             Query query = _db

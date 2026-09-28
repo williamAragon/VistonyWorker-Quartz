@@ -10,11 +10,10 @@ namespace Vistony.Worker.Application.Articulo.Interfaces
     {
         Task<string?> ObtenerCompanyIdAsync(string location);
 
-        Task<bool> ExisteAsync(
-            string companyId,
-            string itemCode);
+        Task<bool> ExisteAsync(string companyId, string itemCode);
 
-        Task GuardarAsync(
-            Domain.Articulo.Articulo articulo);
+        Task GuardarAsync(Domain.Articulo.Articulo articulo);
+
+        Task<HashSet<string>> ObtenerItemCodesExistentesAsync(string companyId);
     }
 }

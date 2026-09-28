@@ -51,14 +51,14 @@ namespace Vistony.Worker.Application.PagoComisiones.UseCases
 
         private async Task EjecutarPorDatabaseAsync(string database)
         {
-            string sp = $"{database}.P_VIS_VEN_PAGO_COMISIONES_ACTU";
+            string sp = $"CALL {database}.P_VIS_VEN_PAGO_COMISIONES_ACTU";
 
             try
             {
                 await _repository.EjecutarAsync(database);
 
                 await _correoClient.EnviarAsync(
-                    $"{database} P_VIS_VEN_PAGO_COMISIONES_ACTU",
+                    $"CALL {database} P_VIS_VEN_PAGO_COMISIONES_ACTU",
                     "Se actualizó las Comisiones");
 
                 _logger.LogInformation(

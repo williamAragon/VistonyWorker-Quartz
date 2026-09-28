@@ -10,9 +10,6 @@ namespace Vistony.Worker.Application.Articulo.Interfaces
     {
         Task<List<string>> ObtenerCodigosAsync(string location);
 
-        Task<Domain.Articulo.Articulo?> ObtenerDetalleAsync(
-            string location,
-            string companyId,
-            string itemCode);
+        Task<Domain.Articulo.Articulo?> ObtenerDetalleAsync(string location, string companyId, string itemCode);
     }
 }
