@@ -17,12 +17,8 @@ using Vistony.Worker.Application.PromoRangos.UseCases;
 using Vistony.Worker.Application.RutaHistorico.UseCases;
 using Vistony.Worker.Application.StockCierre.UseCases;
 using Vistony.Worker.Application.TipoCambio.UseCases;
-<<<<<<< HEAD
 using Vistony.Worker.Application.UpdateWorkPath.UseCases;
 using Vistony.Worker.Application.WMS.UseCases;
-=======
-using Vistony.Worker.Application.UpdateWorkPath.UseCases; 
->>>>>>> .
 
 namespace Vistony.Worker.Api
 {
@@ -203,9 +199,6 @@ namespace Vistony.Worker.Api
                 {
                     TimeZone = timeZone
                 });
-<<<<<<< HEAD
-            
-=======
 
             RecurringJob.AddOrUpdate<MigrarClienteJob>(
                 "migracion-clienteGeneral",
@@ -216,18 +209,15 @@ namespace Vistony.Worker.Api
                     TimeZone = timeZone
                 });
 
-            /*
->>>>>>> .
+            
             RecurringJob.AddOrUpdate<WMSJob>(
                 "wms",
                 job => job.ExecuteAsync(),
-                configuration["Jobs:WMS"] ?? "*/5 * * * *",
+                configuration["Jobs:WMS"] ?? "5 * * * *",
                 new RecurringJobOptions
                 {
                     TimeZone = timeZone
-<<<<<<< HEAD
-=======
-                });*/
+                });
 
             RecurringJob.AddOrUpdate<CalcularPromoRangosJob>(
                 "promo-rangos",
@@ -236,7 +226,6 @@ namespace Vistony.Worker.Api
                 new RecurringJobOptions
                 {
                     TimeZone = timeZone
->>>>>>> .
                 });
         }
     }

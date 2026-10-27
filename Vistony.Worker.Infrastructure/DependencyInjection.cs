@@ -147,11 +147,9 @@ public static class DependencyInjection
         services.AddScoped<PCPUseCase>();
         services.AddScoped<PCPJob>();
 
-<<<<<<< HEAD
         services.AddScoped<IWMSRepository, WMSRepository>();
         services.AddScoped<WMSUseCase>();
         services.AddScoped<WMSJob>();
-=======
         services.AddScoped<IMigracionClienteRepository, MigracionClienteHanaRepository>();
         services.AddSingleton<IFirestoreMigrar, FireStoreClientes>();
         services.AddScoped<MigrarClienteUseCase>();
@@ -160,7 +158,6 @@ public static class DependencyInjection
         services.AddScoped<IPromoRangosRepository, PromoRangosHanaRepository>();
         services.AddScoped<CalcularPromoRangosUseCase>();
         services.AddScoped<CalcularPromoRangosJob>();
->>>>>>> .
 
         return services;
     }
