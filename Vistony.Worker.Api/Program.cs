@@ -3,7 +3,6 @@ using Hangfire.SqlServer;
 using Serilog;
 using Vistony.Worker.Api;
 using Vistony.Worker.Infrastructure;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Puerto del proyecto Vistony.Worker
@@ -69,8 +68,7 @@ app.UseSerilogRequestLogging(options =>
 app.UseHangfireDashboard("/hangfire");
 
 // Registrar jobs recurrentes
-JobsConfiguration.RegisterJobs(builder.Configuration);
-
+JobsConfiguration.RegisterJobs(builder.Configuration); 
 // Redirigir raíz hacia Hangfire
 app.MapGet("/", context =>
 {

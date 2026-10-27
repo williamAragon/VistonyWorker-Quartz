@@ -9,14 +9,20 @@ using Vistony.Worker.Application.CostoEstandar.UseCases;
 using Vistony.Worker.Application.CuentaSalesForce.UseCases;
 using Vistony.Worker.Application.ETL.UseCases;
 using Vistony.Worker.Application.ETLCreditosCobranza.UseCases;
+using Vistony.Worker.Application.MigracionCliente.UseCases;
 using Vistony.Worker.Application.OrdenFabricacion.UseCases;
 using Vistony.Worker.Application.PagoComisiones.UseCases;
 using Vistony.Worker.Application.PCP.UseCase;
+using Vistony.Worker.Application.PromoRangos.UseCases;
 using Vistony.Worker.Application.RutaHistorico.UseCases;
 using Vistony.Worker.Application.StockCierre.UseCases;
 using Vistony.Worker.Application.TipoCambio.UseCases;
+<<<<<<< HEAD
 using Vistony.Worker.Application.UpdateWorkPath.UseCases;
 using Vistony.Worker.Application.WMS.UseCases;
+=======
+using Vistony.Worker.Application.UpdateWorkPath.UseCases; 
+>>>>>>> .
 
 namespace Vistony.Worker.Api
 {
@@ -180,6 +186,15 @@ namespace Vistony.Worker.Api
                     TimeZone = timeZone
                 });
 
+            RecurringJob.AddOrUpdate<CostosComercialJob>(
+            "CostosComercial",
+            job => job.ExecuteAsync(),
+            configuration["Jobs:CostosComercial"] ?? "11 15 * * *",
+            new RecurringJobOptions
+            {
+                TimeZone = timeZone
+            });
+
             RecurringJob.AddOrUpdate<PCPJob>(
                 "pcp",
                 job => job.ExecuteAsync(),
@@ -188,7 +203,21 @@ namespace Vistony.Worker.Api
                 {
                     TimeZone = timeZone
                 });
+<<<<<<< HEAD
             
+=======
+
+            RecurringJob.AddOrUpdate<MigrarClienteJob>(
+                "migracion-clienteGeneral",
+                job => job.ExecuteAsync(),
+                configuration["Jobs:MigracionCliente"] ?? "0 6 * * *",
+                new RecurringJobOptions
+                {
+                    TimeZone = timeZone
+                });
+
+            /*
+>>>>>>> .
             RecurringJob.AddOrUpdate<WMSJob>(
                 "wms",
                 job => job.ExecuteAsync(),
@@ -196,6 +225,18 @@ namespace Vistony.Worker.Api
                 new RecurringJobOptions
                 {
                     TimeZone = timeZone
+<<<<<<< HEAD
+=======
+                });*/
+
+            RecurringJob.AddOrUpdate<CalcularPromoRangosJob>(
+                "promo-rangos",
+                job => job.ExecuteAsync(),
+                configuration["Jobs:PromoRangos"] ?? "0 8-17 * * *",
+                new RecurringJobOptions
+                {
+                    TimeZone = timeZone
+>>>>>>> .
                 });
         }
     }

@@ -56,12 +56,15 @@ namespace Vistony.Worker.Infrastructure.Hana
                 Conetion = _connectionStringInduvis;
 
             }
+            if (database == "B1H_VIST_PE")
+            {
+                await using var connection = new HanaConnection(Conetion);
+                await connection.OpenAsync();
+                string query = $"CALL \"{database}\".\"P_VIS_VEN_PAGO_COMISIONES_B2B_ACTU\"()";
+                await using var command = new HanaCommand(query, connection);
+                await command.ExecuteNonQueryAsync();
 
-            await using var connection = new HanaConnection(Conetion);
-            await connection.OpenAsync();
-            string query = $"CALL \"{database}\".\"P_VIS_VEN_PAGO_COMISIONES_B2B_ACTU\"()";
-            await using var command = new HanaCommand(query, connection);
-            await command.ExecuteNonQueryAsync();
+            }
         }
 
     }

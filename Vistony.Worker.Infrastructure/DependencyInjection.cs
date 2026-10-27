@@ -20,12 +20,16 @@ using Vistony.Worker.Application.ETL.Interfaces;
 using Vistony.Worker.Application.ETL.UseCases;
 using Vistony.Worker.Application.ETLCreditosCobranza.Interfaces;
 using Vistony.Worker.Application.ETLCreditosCobranza.UseCases;
+using Vistony.Worker.Application.MigracionCliente.Interfaces;
+using Vistony.Worker.Application.MigracionCliente.UseCases;
 using Vistony.Worker.Application.OrdenFabricacion.Interfaces;
 using Vistony.Worker.Application.OrdenFabricacion.UseCases;
 using Vistony.Worker.Application.PagoComisiones.Interfaces;
 using Vistony.Worker.Application.PagoComisiones.UseCases;
 using Vistony.Worker.Application.PCP.Interfaces;
 using Vistony.Worker.Application.PCP.UseCase;
+using Vistony.Worker.Application.PromoRangos.Interfaces;
+using Vistony.Worker.Application.PromoRangos.UseCases;
 using Vistony.Worker.Application.RutaHistorico.Interfaces;
 using Vistony.Worker.Application.RutaHistorico.UseCases;
 using Vistony.Worker.Application.StockCierre.Interfaces;
@@ -91,8 +95,12 @@ public static class DependencyInjection
         services.AddScoped<ObtenerCuentaSalesForceJob>();
 
         services.AddScoped<ICostoEstandarRepository, CostoEstandarHanaRepository>();
+        services.AddScoped<ICostoComercialRepository, CostoComercialHanaRepository>();
         services.AddScoped<ObtenerCostoEstandarUseCase>();
         services.AddScoped<ObtenerCostoEstandarJob>();
+
+        services.AddScoped<ObtenerCostoComercialUseCase>();
+        services.AddScoped<CostosComercialJob>();
 
         services.AddScoped<IPagoComisionesRepository, PagoComisionesHanaRepository>();
         services.AddScoped<ICorreoPagoComisionesClient, CorreoPagoComisionesClient>();
@@ -139,9 +147,20 @@ public static class DependencyInjection
         services.AddScoped<PCPUseCase>();
         services.AddScoped<PCPJob>();
 
+<<<<<<< HEAD
         services.AddScoped<IWMSRepository, WMSRepository>();
         services.AddScoped<WMSUseCase>();
         services.AddScoped<WMSJob>();
+=======
+        services.AddScoped<IMigracionClienteRepository, MigracionClienteHanaRepository>();
+        services.AddSingleton<IFirestoreMigrar, FireStoreClientes>();
+        services.AddScoped<MigrarClienteUseCase>();
+        services.AddScoped<MigrarClienteJob>();
+
+        services.AddScoped<IPromoRangosRepository, PromoRangosHanaRepository>();
+        services.AddScoped<CalcularPromoRangosUseCase>();
+        services.AddScoped<CalcularPromoRangosJob>();
+>>>>>>> .
 
         return services;
     }
