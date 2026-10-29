@@ -13,6 +13,7 @@ using Vistony.Worker.Application.MigracionCliente.UseCases;
 using Vistony.Worker.Application.OrdenFabricacion.UseCases;
 using Vistony.Worker.Application.PagoComisiones.UseCases;
 using Vistony.Worker.Application.PCP.UseCase;
+using Vistony.Worker.Application.PrecioMayorista.UseCase;
 using Vistony.Worker.Application.PromoRangos.UseCases;
 using Vistony.Worker.Application.RutaHistorico.UseCases;
 using Vistony.Worker.Application.StockCierre.UseCases;
@@ -223,6 +224,15 @@ namespace Vistony.Worker.Api
                 "promo-rangos",
                 job => job.ExecuteAsync(),
                 configuration["Jobs:PromoRangos"] ?? "0 8-17 * * *",
+                new RecurringJobOptions
+                {
+                    TimeZone = timeZone
+                });
+
+            RecurringJob.AddOrUpdate<PrecioMayoristaJob>(
+                "precio-mayorista",
+                job => job.ExecuteAsync(),
+                configuration["Jobs:PrecioMayorista"] ?? "0 */4 * * *",
                 new RecurringJobOptions
                 {
                     TimeZone = timeZone

@@ -28,6 +28,8 @@ using Vistony.Worker.Application.PagoComisiones.Interfaces;
 using Vistony.Worker.Application.PagoComisiones.UseCases;
 using Vistony.Worker.Application.PCP.Interfaces;
 using Vistony.Worker.Application.PCP.UseCase;
+using Vistony.Worker.Application.PrecioMayorista.Interfaces;
+using Vistony.Worker.Application.PrecioMayorista.UseCase;
 using Vistony.Worker.Application.PromoRangos.Interfaces;
 using Vistony.Worker.Application.PromoRangos.UseCases;
 using Vistony.Worker.Application.RutaHistorico.Interfaces;
@@ -158,6 +160,10 @@ public static class DependencyInjection
         services.AddScoped<IPromoRangosRepository, PromoRangosHanaRepository>();
         services.AddScoped<CalcularPromoRangosUseCase>();
         services.AddScoped<CalcularPromoRangosJob>();
+
+        services.AddScoped<IPrecioMayorista, PrecioMayoristaHanaRepository>();
+        services.AddScoped<PrecioMayoristaUseCase>();
+        services.AddScoped<PrecioMayoristaJob>();
 
         return services;
     }
